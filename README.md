@@ -82,36 +82,54 @@ For the rest of the queries, we'll be using the `albums` and `songs` tables.
 6. List all albums along with their songs
 
 ```sql
-
+SELECT * FROM albums
+JOIN songs ON albums.id = songs.album_id;
 ```
+
 7. List all albums along with how many songs each album has
 
 ```sql
-
+SELECT album_name, COUNT(songs.id) AS num_songs
+FROM albums
+JOIN songs ON albums.id = songs.album_id
+GROUP BY album_name;
 ```
 
 8. Enhance previous query to only include albums that have more than 10 songs
 
 ```sql
-
+SELECT album_name, COUNT(songs.id) AS num_songs
+FROM albums
+LEFT JOIN songs ON albums.id = songs.album_id
+GROUP BY album_name
+HAVING COUNT(songs.id) > 10;
 ```
 
 9. List ALL albums in the database, along with their songs if any
 
 ```sql
-
+SELECT album_name, songs.*
+FROM albums
+LEFT JOIN songs ON albums.id = songs.album_id;
 ```
 
 10. List albums along with average song rating
 
 ```sql
-
+SELECT album_name, AVG(songs.rating) AS avg_rating
+FROM albums
+JOIN songs ON albums.id = songs.album_id
+GROUP BY album_name
+ORDER BY avg_rating DESC;
 ```
 
 11. List albums and songs with rating higher than album average
 
 ```sql
-
+SELECT album_name, song_name, rating, (SELECT AVG(songs.rating) FROM songs WHERE albums.id = songs.album_id) as avg_rating
+FROM albums
+INNER JOIN songs ON albums.id = songs.album_id
+WHERE rating > (SELECT AVG(songs.rating) FROM songs WHERE albums.id = songs.album_id);
 ```
 
 ### Useful Links
